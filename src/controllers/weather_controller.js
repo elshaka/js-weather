@@ -2,11 +2,11 @@ class WeatherController {
   constructor(weatherModel, weatherView) {
     this.weatherModel = weatherModel;
     this.weatherView = weatherView;
-    this.weatherModel.updated.addListener(this.weatherView.update);
+
+    this.weatherModel.updateEvent.addListener(this.weatherView.updateListener);
   }
 
   run() {
-    this.weatherView.render();
     this.weatherModel.get();
   }
 }
