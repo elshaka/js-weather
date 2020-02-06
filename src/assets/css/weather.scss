@@ -6,11 +6,11 @@ $dark-grey: #353432;
 
 .weather-widget {
   color: $grey;
-  margin: 40px auto;
   font-family: 'Roboto', sans-serif;
   width: 400px;
   min-height: 270px;
-  box-shadow: 0 2px 10px #111;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px #444;
 
   .header {
     display: flex;

@@ -30,7 +30,7 @@ class WeatherView {
     const header = document.createElement('div');
     header.className = 'header';
     this.location = document.createElement('input');
-    this.location.placeholder = 'Enter a location';
+    this.location.placeholder = 'Enter a city name';
     this.search = document.createElement('button');
     this.search.innerHTML= 'Search';
     header.appendChild(this.location);
