@@ -1,13 +1,16 @@
-class WeatherController {
-  constructor(weatherModel, weatherView) {
-    this.weatherModel = weatherModel;
-    this.weatherView = weatherView;
+import Weather from '../models/weather';
+import WeatherView from '../views/weather_view';
 
-    this.weatherModel.updateEvent.addListener(this.weatherView.updateListener);
+class WeatherController {
+  constructor(target, apiID) {
+    this.weather = new Weather(apiID);
+    this.weatherView = new WeatherView(target);
+    this.weatherView.locationChangeEvent.addListener(this.weather.locationChangeListener);
+    this.weather.updateEvent.addListener(this.weatherView.updateListener);
   }
 
-  run() {
-    this.weatherModel.get();
+  run(location) {
+    this.weather.get(location);
   }
 }
 

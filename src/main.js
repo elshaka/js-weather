@@ -1,9 +1,6 @@
-import Weather from './models/weather';
-import WeatherView from './views/weather_view';
+import './assets/css/main.scss';
 import WeatherController from './controllers/weather_controller';
 
-const weather = new Weather('Dolartoday');
-const weatherView = new WeatherView('#weather');
-const app = new WeatherController(weather, weatherView);
+const app = new WeatherController('#weather', '048840c1ca326e3a3e053c5eb9ded3f3');
 
-app.run();
+app.run('Barquisimeto');
