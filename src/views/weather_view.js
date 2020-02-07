@@ -11,13 +11,13 @@ class WeatherView {
     this.weatherUpdateListener = (data) => {
       this.locationName.innerHTML = data.city;
       this.bigIcon.src = WeatherView.getIconImgSrc(data.days[0].icon);
-      this.temp.innerHTML = `${WeatherView.kToF(data.days[0].temp)}°`;
+      this.temp.innerHTML = `${WeatherView.kToC(data.days[0].temp)}°`;
       this.description.innerHTML = data.days[0].description;
       this.days.forEach((day, index) => {
         day.name.innerHTML = format(data.days[index].date, 'EEE');
         day.icon.src = WeatherView.getIconImgSrc(data.days[index].icon);
-        day.tempMax.innerHTML = `${WeatherView.kToF(data.days[index].tempMax)}°`;
-        day.tempMin.innerHTML = `${WeatherView.kToF(data.days[index].tempMin)}°`;
+        day.tempMax.innerHTML = `${WeatherView.kToC(data.days[index].tempMax)}°`;
+        day.tempMin.innerHTML = `${WeatherView.kToC(data.days[index].tempMin)}°`;
       });
     };
 
@@ -133,8 +133,8 @@ class WeatherView {
     return `https://openweathermap.org/img/wn/${icon}@2x.png`;
   }
 
-  static kToF(k) {
-    return Math.round(k * (9 / 5) - 459.67);
+  static kToC(k) {
+    return Math.round(k - 273.15);
   }
 }
 
