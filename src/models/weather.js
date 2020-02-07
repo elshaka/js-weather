@@ -19,15 +19,14 @@ class Weather {
       const locationQuery = Weather.getLocationQuery(location);
       const requestUrl = `${this.baseUrl}${locationQuery}&APPID=${this.apiID}`;
       const fetchPromise = fetch(requestUrl, { mode: 'cors' });
-      fetchPromise.then(response => response.json())
-        .then(data => {
-          if (data.cod === '200') {
-            Weather.setCache(location, data);
-            this.weatherUpdateEvent.notify(Weather.formatData(data));
-          } else {
-            this.locationNotFoundEvent.notify(data);
-          }
-        });
+      fetchPromise.then(response => response.json()).then(data => {
+        if (data.cod === '200') {
+          Weather.setCache(location, data);
+          this.weatherUpdateEvent.notify(Weather.formatData(data));
+        } else {
+          this.locationNotFoundEvent.notify(data);
+        }
+      });
       fetchPromise.catch(error => { this.networkErrorEvent.notify(error); });
     }
   }
@@ -46,9 +45,8 @@ class Weather {
     if (cachedData) {
       if (Weather.nowInEpoch() - cachedData.cachedAt < 3600) {
         return cachedData.data;
-      } else {
-        localStorage.removeItem(JSON.stringify(location));
       }
+      localStorage.removeItem(JSON.stringify(location));
     }
     return null;
   }
@@ -62,11 +60,13 @@ class Weather {
     const city = `${data.city.name}, ${data.city.country}`;
     const days = Array(5).fill().map((_, index) => {
       const item = data.list[index * 8];
+      const tempMin = Math.min(...data.list.slice(index * 8, (index + 1) * 8).map(i => i.main.temp_min));
+      const tempMax = Math.max(...data.list.slice(index * 8, (index + 1) * 8).map(i => i.main.temp_max));
       return {
         date: new Date(item.dt_txt),
         temp: item.main.temp,
-        tempMin: item.main.temp_min,
-        tempMax: item.main.temp_max,
+        tempMin,
+        tempMax,
         description: item.weather[0].description,
         icon: item.weather[0].icon,
       };
