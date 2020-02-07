@@ -16,16 +16,7 @@ class Weather {
     if (cache) {
       this.weatherUpdateEvent.notify(Weather.formatData(cache));
     } else {
-      const locationQuery = ((l) => {
-        switch(l.type) {
-          case 'latlon':
-            return `lat=${l.lat}&lon=${l.lon}`;
-          case 'city':
-            return `q=${l.city}`;
-          default:
-            throw `Location type ${l.type} not supported`;
-        }
-      })(location);
+      const locationQuery = Weather.getLocationQuery(location);
       const requestUrl = `${this.baseUrl}${locationQuery}&APPID=${this.apiID}`;
       const fetchPromise = fetch(requestUrl, { mode: 'cors' });
       fetchPromise.then(response => response.json())
@@ -41,12 +32,30 @@ class Weather {
     }
   }
 
+  static getLocationQuery(location) {
+    switch (location.type) {
+      case 'latlon':
+        return `lat=${location.lat}&lon=${location.lon}`;
+      default:
+        return `q=${location}`;
+    }
+  }
+
   static getCache(location) {
-    return JSON.parse(localStorage.getItem(JSON.stringify(location)));
+    const cachedData = JSON.parse(localStorage.getItem(JSON.stringify(location)));
+    if (cachedData) {
+      if (Weather.nowInEpoch() - cachedData.cachedAt < 3600) {
+        return cachedData.data;
+      } else {
+        localStorage.removeItem(JSON.stringify(location));
+      }
+    }
+    return null;
   }
 
   static setCache(location, data) {
-    localStorage.setItem(JSON.stringify(location), JSON.stringify(data));
+    const cachedData = { cachedAt: Weather.nowInEpoch(), data };
+    localStorage.setItem(JSON.stringify(location), JSON.stringify(cachedData));
   }
 
   static formatData(data) {
@@ -64,6 +73,10 @@ class Weather {
     });
 
     return { city, days };
+  }
+
+  static nowInEpoch() {
+    return Math.round((new Date()).getTime() / 1000);
   }
 }
 
