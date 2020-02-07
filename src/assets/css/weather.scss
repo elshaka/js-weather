@@ -90,11 +90,40 @@ $dark-grey: #353432;
       justify-content: center;
       align-items: flex-start;
 
+      .temp-container {
+        display: flex;
+        align-items: center;
+      }
+
       .temp {
         font-size: 40px;
         font-weight: bold;
         color: $orange;
       }
+
+      .units-container {
+        display: flex;
+        align-items: center;
+
+        a {
+          padding: 5px;
+          cursor: pointer;
+        }
+
+        .checked {
+          font-size: 20px;
+          color: $orange;
+          font-weight: bold;
+        }
+
+        .unchecked {
+          font-size: 14px;
+          color: $grey;
+          font-weight: normal;
+        }
+      }
+
+
 
       .description {
         font-size: 14px;

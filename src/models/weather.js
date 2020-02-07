@@ -42,12 +42,11 @@ class Weather {
 
   static getCache(location) {
     const cachedData = JSON.parse(localStorage.getItem(JSON.stringify(location)));
-    if (cachedData) {
-      if (Weather.nowInEpoch() - cachedData.cachedAt < 3600) {
-        return cachedData.data;
-      }
-      localStorage.removeItem(JSON.stringify(location));
+    if (cachedData && Weather.nowInEpoch() - cachedData.cachedAt < 3600) {
+      return cachedData.data;
     }
+
+    localStorage.removeItem(JSON.stringify(location));
     return null;
   }
 
