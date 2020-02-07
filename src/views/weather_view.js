@@ -10,7 +10,6 @@ class WeatherView {
     this.initUI(document.querySelector(target));
     this.initEvents();
     this.initListeners();
-    this.setUnits('c');
   }
 
   initUI(targetNode) {
@@ -98,6 +97,7 @@ class WeatherView {
     weatherWidget.appendChild(footer);
     targetNode.appendChild(weatherWidget);
 
+    this.setUnits(localStorage.getItem('units') || 'c');
     this.clearUI();
   }
 
@@ -161,6 +161,7 @@ class WeatherView {
 
   setUnits(units) {
     this.units = units;
+    localStorage.setItem('units', units);
     this.unitsContainer.childNodes.forEach(a => {
       a.className = (a.id === units) ? 'checked' : 'unchecked';
     });
