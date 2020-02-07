@@ -46,7 +46,7 @@ class WeatherView {
     this.unitsContainer = document.createElement('div');
     this.unitsContainer.className = 'units-container';
     this.celcius = document.createElement('a');
-    this.celcius.id ='c';
+    this.celcius.id = 'c';
     this.celcius.innerHTML = 'C';
     this.fahrenheit = document.createElement('a');
     this.fahrenheit.id = 'f';
@@ -162,7 +162,7 @@ class WeatherView {
   setUnits(units) {
     this.units = units;
     this.unitsContainer.childNodes.forEach(a => {
-      a.className = (a.id == units) ? 'checked' : 'unchecked';
+      a.className = (a.id === units) ? 'checked' : 'unchecked';
     });
 
     if (!Number.isNaN(Number(this.temp.dataset.value))) {
