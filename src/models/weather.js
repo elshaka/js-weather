@@ -3,7 +3,7 @@ import Event from './event';
 class Weather {
   constructor(apiID) {
     this.apiID = apiID;
-    this.baseUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=';
+    this.baseUrl = 'https://api.openweathermap.org/data/2.5/forecast?';
     this.weatherUpdateEvent = new Event(this);
     this.locationNotFoundEvent = new Event(this);
     this.networkErrorEvent = new Event(this);
@@ -16,7 +16,17 @@ class Weather {
     if (cache) {
       this.weatherUpdateEvent.notify(Weather.formatData(cache));
     } else {
-      const requestUrl = `${this.baseUrl}${location}&APPID=${this.apiID}`;
+      const locationQuery = ((l) => {
+        switch(l.type) {
+          case 'latlon':
+            return `lat=${l.lat}&lon=${l.lon}`;
+          case 'city':
+            return `q=${l.city}`;
+          default:
+            throw `Location type ${l.type} not supported`;
+        }
+      })(location);
+      const requestUrl = `${this.baseUrl}${locationQuery}&APPID=${this.apiID}`;
       const fetchPromise = fetch(requestUrl, { mode: 'cors' });
       fetchPromise.then(response => response.json())
         .then(data => {
@@ -32,11 +42,11 @@ class Weather {
   }
 
   static getCache(location) {
-    return JSON.parse(localStorage.getItem(location));
+    return JSON.parse(localStorage.getItem(JSON.stringify(location)));
   }
 
   static setCache(location, data) {
-    localStorage.setItem(location, JSON.stringify(data));
+    localStorage.setItem(JSON.stringify(location), JSON.stringify(data));
   }
 
   static formatData(data) {

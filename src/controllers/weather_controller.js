@@ -14,9 +14,11 @@ class WeatherController {
   run() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const long = position.coords.longitude;
-        this.weather.get(`lat=${lat}&lon=${long}`);
+        this.weather.get({
+          type: 'latlon',
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
       });
     }
   }
