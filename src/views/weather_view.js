@@ -1,5 +1,7 @@
 import '../assets/css/weather.scss';
+/* eslint-disable import/no-unresolved */
 import { format } from 'date-fns';
+/* eslint-enable import/no-unresolved */
 import spinner from '../assets/images/spinner.gif';
 import Event from '../models/event';
 

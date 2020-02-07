@@ -60,8 +60,10 @@ class Weather {
     const city = `${data.city.name}, ${data.city.country}`;
     const days = Array(5).fill().map((_, index) => {
       const item = data.list[index * 8];
-      const tempMin = Math.min(...data.list.slice(index * 8, (index + 1) * 8).map(i => i.main.temp_min));
-      const tempMax = Math.max(...data.list.slice(index * 8, (index + 1) * 8).map(i => i.main.temp_max));
+      const tempMin = Math.min(...data.list.slice(index * 8, (index + 1) * 8)
+        .map(i => i.main.temp_min));
+      const tempMax = Math.max(...data.list.slice(index * 8, (index + 1) * 8)
+        .map(i => i.main.temp_max));
       return {
         date: new Date(item.dt_txt),
         temp: item.main.temp,
