@@ -9,7 +9,7 @@ class Event {
   }
 
   notify(args) {
-    this.listeners.forEach(listener => listener(this.sender, args));
+    this.listeners.forEach(listener => listener(args));
   }
 }
 

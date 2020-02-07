@@ -1,16 +1,15 @@
 import '../assets/css/weather.scss';
+import { format } from 'date-fns';
 import spinner from '../assets/images/spinner.gif';
 import Event from '../models/event';
-import { format } from 'date-fns';
 
 class WeatherView {
   constructor(target) {
     this.init(document.querySelector(target));
     this.reset();
-    this.locationChangeEvent = new Event(this);
 
-    this.updateListener = (_, data) => {
-      this.location.value = data.city;
+    this.weatherUpdateListener = (data) => {
+      this.locationName.innerHTML = data.city;
       this.bigIcon.src = WeatherView.getIconImgSrc(data.days[0].icon);
       this.temp.innerHTML = `${WeatherView.kToF(data.days[0].temp)}°`;
       this.description.innerHTML = data.days[0].description;
@@ -21,6 +20,30 @@ class WeatherView {
         day.tempMin.innerHTML = `${WeatherView.kToF(data.days[index].tempMin)}°`;
       });
     };
+
+    this.locationNotFoundListener = () => {
+      this.locationName.innerHTML = 'Location not found';
+    };
+
+    this.networkErrorListener = () => {
+      this.locationName.innerHTML = 'Network error, please try again later.';
+    };
+
+    this.locationChangeEvent = new Event(this);
+
+    this.search.addEventListener('click', () => {
+      const location = this.locationInput.value.trim().toLowerCase();
+      if (location) {
+        this.reset();
+        this.locationChangeEvent.notify(location);
+      }
+    });
+
+    this.locationInput.addEventListener('keyup', (e) => {
+      if (e.keyCode === 13) {
+        this.search.click();
+      }
+    });
   }
 
   init(targetNode) {
@@ -29,15 +52,18 @@ class WeatherView {
 
     const header = document.createElement('div');
     header.className = 'header';
-    this.location = document.createElement('input');
-    this.location.placeholder = 'Enter a city name';
+    this.locationInput = document.createElement('input');
+    this.locationInput.placeholder = 'Enter a city name';
     this.search = document.createElement('button');
-    this.search.innerHTML= 'Search';
-    header.appendChild(this.location);
+    this.search.innerHTML = 'Search';
+    header.appendChild(this.locationInput);
     header.appendChild(this.search);
 
     const content = document.createElement('div');
     content.className = 'content';
+
+    this.locationName = document.createElement('h2');
+    content.appendChild(this.locationName);
 
     const today = document.createElement('div');
     today.className = 'today';
@@ -74,7 +100,9 @@ class WeatherView {
       day.appendChild(tempMin);
       week.appendChild(day);
 
-      return { name, icon, tempMax, tempMin };
+      return {
+        name, icon, tempMax, tempMin,
+      };
     });
     content.appendChild(week);
 
@@ -86,18 +114,13 @@ class WeatherView {
     weatherWidget.appendChild(content);
     weatherWidget.appendChild(footer);
     targetNode.appendChild(weatherWidget);
-
-    this.search.addEventListener('click', () => {
-      const location = this.location.value.trim().toLowerCase();
-      this.reset();
-      this.locationChangeEvent.notify(location);
-    });
   }
 
   reset() {
+    this.locationName.innerHTML = '...';
     this.bigIcon.src = spinner;
     this.temp.innerHTML = '-°';
-    this.description.innerHTML = 'Loading weather...';
+    this.description.innerHTML = '...';
     this.days.forEach(day => {
       day.name.innerHTML = '...';
       day.icon.src = spinner;
@@ -111,7 +134,7 @@ class WeatherView {
   }
 
   static kToF(k) {
-    return Math.round(k * 9/5 - 459.67);
+    return Math.round(k * (9 / 5) - 459.67);
   }
 }
 
