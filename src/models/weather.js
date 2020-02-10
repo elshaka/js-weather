@@ -64,7 +64,7 @@ class Weather {
       const tempMax = Math.max(...data.list.slice(index * 8, (index + 1) * 8)
         .map(i => i.main.temp_max));
       return {
-        date: new Date(item.dt_txt),
+        date: new Date(item.dt_txt.replace(/-/g, '/')),
         temp: item.main.temp,
         tempMin,
         tempMax,
