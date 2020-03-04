@@ -1,12 +1,13 @@
 
 # js-weather
-A simple weather app built to get familiar with asynchronous JavaScript.
+A simple weather app built to get familiar with asynchronous JavaScript (and now React!).
 
 ![screenshot](./screenshot.png)
 
 ## Built with
 
 - ES6
+- React
 - SASS
 - npm
 - webpack
