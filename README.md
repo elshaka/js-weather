@@ -35,7 +35,7 @@ npm start
 
 ## Live version
 
-A live version is available [here](https://raw.githack.com/elshaka/js-weather/development/dist/index.html)
+A live version is available [here](https://raw.githack.com/elshaka/js-weather/react/dist/index.html)
 
 
 ## Author

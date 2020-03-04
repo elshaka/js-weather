@@ -24,7 +24,7 @@ const App = () => {
 
   const setUnits = (units) => {
     dispatch(changeUnits(units));
-  }
+  };
 
   useEffect(() => {
     fetchBrowserLocation(dispatch);
