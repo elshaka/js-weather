@@ -25,7 +25,7 @@ export const fetchLocation = (location, dispatch) => {
         dispatch(setWeather(formatWeather(weather)));
       })
       .catch(e => {
-        if (e.response.status === 404) {
+        if (e.response && e.response.status === 404) {
           dispatch(setError('Location not found'));
         } else {
           dispatch(setError('Network error, please try again later'));
